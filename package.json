@@ -1,13 +1,11 @@
 {
-  "name": "ts-practice",
+  "name": "mirror_server",
   "version": "1.0.0",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "postinstall": "prisma generate",
     "build": "npx tsc",
-    "dev": "npm run build && concurrently \"npx tsx -w\" \"nodemon --exec ts-node ./src/index.ts\" ",
-    "start": "node ./dist/index.js"
+    "dev": "nodemon --watch 'src/**/*.ts' --exec 'ts-node-esm src/index.ts'",
+    "start": "node dist/index.js"
   },
   "keywords": [],
   "author": "",
@@ -32,7 +30,9 @@
     "@types/express": "^5.0.3",
     "@types/helmet": "^0.0.48",
     "@types/mongoose": "^5.11.96",
+    "@types/node": "^24.0.10",
     "concurrently": "^9.2.0",
-    "nodemon": "^3.1.10"
+    "nodemon": "^3.1.10",
+    "ts-node-dev": "^2.0.0"
   }
 }
