@@ -1,8 +1,8 @@
 import express from "express";
-// import { toNodeHandler } from "better-auth/node";
+import { toNodeHandler } from "better-auth/node";
 import cors from "cors";
 import "dotenv/config";
-// import { auth } from "./lib/auth";
+import { auth } from "./lib/auth";
 import morgan from "morgan";
 import helmet from "helmet";
 
@@ -13,7 +13,7 @@ import GuestRouter from "./routers/guest-router";
 import { PrismaClient } from "@prisma/client";
 
 const app = express();
-// app.all("/api/auth/*splat", toNodeHandler(auth));
+app.all("/api/auth/*splat", toNodeHandler(auth));
 app.use(
   cors({
     origin: "*",

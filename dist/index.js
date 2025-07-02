@@ -13,10 +13,10 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = __importDefault(require("express"));
-// import { toNodeHandler } from "better-auth/node";
+const node_1 = require("better-auth/node");
 const cors_1 = __importDefault(require("cors"));
 require("dotenv/config");
-// import { auth } from "./lib/auth";
+const auth_1 = require("./lib/auth");
 const morgan_1 = __importDefault(require("morgan"));
 const helmet_1 = __importDefault(require("helmet"));
 const setup_router_1 = __importDefault(require("./routers/setup-router"));
@@ -25,7 +25,7 @@ const papers_router_1 = __importDefault(require("./routers/papers-router"));
 const guest_router_1 = __importDefault(require("./routers/guest-router"));
 const client_1 = require("@prisma/client");
 const app = (0, express_1.default)();
-// app.all("/api/auth/*splat", toNodeHandler(auth));
+app.all("/api/auth/*splat", (0, node_1.toNodeHandler)(auth_1.auth));
 app.use((0, cors_1.default)({
     origin: "*",
     credentials: true,
