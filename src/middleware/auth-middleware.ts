@@ -1,6 +1,6 @@
 import { NextFunction, Request, Response } from "express";
 // import { auth } from "../lib/auth";
-import { fromNodeHeaders } from "better-auth/node";
+// import { fromNodeHeaders } from "better-auth/node";
 
 declare module "express-serve-static-core" {
   interface Request {

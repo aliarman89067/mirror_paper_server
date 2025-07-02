@@ -10,6 +10,7 @@ import SetupRouter from "./routers/setup-router";
 import UserRouter from "./routers/user-router";
 import PapersRouter from "./routers/papers-router";
 import GuestRouter from "./routers/guest-router";
+import { PrismaClient } from "@prisma/client";
 
 const app = express();
 // app.all("/api/auth/*splat", toNodeHandler(auth));
@@ -29,8 +30,11 @@ app.use("/api/v1/setup", SetupRouter);
 app.use("/api/v1/papers", PapersRouter);
 app.use("/api/v1/guest", GuestRouter);
 
-app.get("/", async (req, res) => {
-  res.send("Hello World");
+const prisma = new PrismaClient();
+
+app.get("/test", async (req, res) => {
+  const data = await prisma.guest.findMany();
+  res.send(data);
 });
 
 app.listen(3000, () => {
