@@ -1,0 +1,143 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+  output   = "../node_modules/.prisma/client"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id            String    @id @default(uuid())
+  name          String
+  email         String    @unique
+  sessionId     String?
+  emailVerified Boolean
+  image         String? @default("https://i.pinimg.com/736x/87/14/55/8714556a52021ba3a55c8e7a3547d28c.jpg")
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+
+  // Relations
+  friends       Friend[]
+  requestSends RequestSend[]
+  requestRecieved RequestRecieved[]
+  userPaperFields UserPaperFields[]
+  sessions      Session[]
+  accounts      Account[]
+
+  @@map("user")
+}
+
+model Guest {
+  id            String    @id @default(uuid())
+  name          String
+  sessionId     String?
+  image         String? @default("https://i.pinimg.com/736x/87/14/55/8714556a52021ba3a55c8e7a3547d28c.jpg")
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+
+  // Relations
+  userPaperFields UserPaperFields[]
+  @@map("guest")
+}
+
+model UserPaperFields {
+  id        String @default(uuid()) @id
+  userId    String?
+  user      User? @relation(fields: [userId], references: [id])
+  guestId    String?
+  guest      Guest? @relation(fields: [guestId], references: [id])
+  board     String[]
+  grade     String[]
+  subjects  String[]
+}
+
+model Friend {
+  id        String   @default(uuid()) @id
+  userId    String
+  friendId  String
+
+  friend    User     @relation(fields: [friendId], references: [id])
+
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+
+  @@unique([userId, friendId]) // prevent duplicate friend entries
+}
+model RequestSend {
+  id          String @default(uuid()) @id
+  userId      String
+  requestId   String
+
+  request     User     @relation(fields: [requestId], references: [id])
+
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+
+  @@unique([userId, requestId]) // prevent duplicate friend entries
+}
+
+model RequestRecieved {
+  id            String @default(uuid()) @id
+  userId        String
+  recievedId    String
+
+  recieved      User     @relation(fields: [recievedId], references: [id])
+  
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+
+  @@unique([userId, recievedId]) // prevent duplicate friend entries
+}
+
+model Session {
+  id        String   @id
+  expiresAt DateTime
+  token     String
+  createdAt DateTime
+  updatedAt DateTime
+  ipAddress String?
+  userAgent String?
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([token])
+  @@map("session")
+}
+
+model Account {
+  id                    String    @id
+  accountId             String
+  providerId            String
+  userId                String
+  user                  User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  accessToken           String?
+  refreshToken          String?
+  idToken               String?
+  accessTokenExpiresAt  DateTime?
+  refreshTokenExpiresAt DateTime?
+  scope                 String?
+  password              String?
+  createdAt             DateTime
+  updatedAt             DateTime
+
+  @@map("account")
+}
+
+model Verification {
+  id         String    @id
+  identifier String
+  value      String
+  expiresAt  DateTime
+  createdAt  DateTime?
+  updatedAt  DateTime?
+
+  @@map("verification")
+}
