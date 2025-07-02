@@ -1,5 +1,5 @@
 import { NextFunction, Request, Response } from "express";
-import { auth } from "../lib/auth";
+// import { auth } from "../lib/auth";
 import { fromNodeHeaders } from "better-auth/node";
 
 declare module "express-serve-static-core" {
@@ -16,15 +16,15 @@ export const authMiddelware = async (
   next: NextFunction
 ) => {
   try {
-    const authData = await auth.api.getSession({
-      headers: fromNodeHeaders(req.headers),
-    });
-    if (!authData) {
-      res.status(401).json({ message: "Unauthorized user" });
-      return;
-    }
+    // const authData = await auth.api.getSession({
+    //   headers: fromNodeHeaders(req.headers),
+    // });
+    // if (!authData) {
+    //   res.status(401).json({ message: "Unauthorized user" });
+    //   return;
+    // }
     req.user = {
-      id: authData.user.id,
+      id: "123",
     };
     next();
   } catch (error) {
